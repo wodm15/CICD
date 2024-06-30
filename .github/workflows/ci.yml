@@ -1,6 +1,7 @@
 name: Sparta Nest.js CI
 
 on: # 언제 실행 될지 정의
+  workflow_dispatch: # 수동 실행
   push: # PUSH 됐을 때
     branches: [main] # main 브랜치
   pull_request: # PR이 생성됐을 때
@@ -14,15 +15,16 @@ jobs:
 
     # 작업 내의 단위 작업(step)을 정의
     steps:
-      # VM에 Node.js 설치하기
-      - name: Setup Node.js environment # step의 이름 지정 (선택 사항)
-        uses: actions/setup-node@v2 # 미리 정의 된 workflow를 불러와서 사용
-        with:
-          node-version: 20.x # 설치 할 Node.js 버전 지정
-
       # 소스 코드 가져오기
       - name: Checkout source code # step의 이름 지정 (선택 사항)
-        uses: actions/checkout@v2 # 미리 정의 된 workflow를 불러와서 사용
+        uses: actions/checkout@v4 # 미리 정의 된 workflow를 불러와서 사용
+
+      # VM에 Node.js 설치하기
+      - name: Setup Node.js environment # step의 이름 지정 (선택 사항)
+        uses: actions/setup-node@v4 # 미리 정의 된 workflow를 불러와서 사용
+        with:
+          node-version: 20 # 설치 할 Node.js 버전 지정
+          cache: 'yarn'
 
       # 의존성 패키지 설치하기
       - name: Install dependencies # step의 이름 지정 (선택 사항)
