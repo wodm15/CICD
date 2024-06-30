@@ -26,8 +26,8 @@ jobs:
           port: ${{ secrets.AWS_EC2_PORT }}
           script: |
 
-            # 설치 된 명령어(yarn, pm2) 실행을 위한 설정
-            source ~/.bashrc
+            # bash shell 실행
+            exec bash
 
             # 프로젝트 폴더로 이동
             cd /home/ubuntu/sparta-nest-cicd
