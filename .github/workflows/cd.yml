@@ -1,0 +1,61 @@
+name: Sparta Nest.js CD
+
+on:
+  workflow_dispatch: # 수동 실행
+  workflow_run: # 특정 workflow가 실행됐을 때
+    workflows: ['Sparta Nest.js CI']
+    branches: [main]
+    types: [completed]
+
+jobs:
+  deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      # # 소스 코드 가져오기
+      # - name: Checkout source code # step의 이름 지정 (선택 사항)
+      #   uses: actions/checkout@v4 # 미리 정의 된 workflow를 불러와서 사용
+
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.AWS_EC2_HOST }}
+          username: ${{ secrets.AWS_EC2_USERNAME }}
+          key: ${{ secrets.AWS_EC2_PEM_KEY }}
+          port: ${{ secrets.AWS_EC2_PORT }}
+          script: |
+            # 프로젝트 폴더로 이동
+            cd /home/ubuntu/sparta-nest-cicd
+
+            # main 브랜치로 이동
+            git switch main
+
+            # 최신 소스 코드를 가져옴
+            git pull
+
+            # .env 파일 생성
+            echo "SERVER_PORT=${{ secrets.SERVER_PORT }}" > .env
+
+            # 의존성 설치
+            yarn --frozen-lockfile
+
+            # 빌드
+            yarn build
+
+            # PM2로 실행 중인 서버 중지 및 삭제
+            pm2 delete sparta-nest-cicd
+
+            # 서버를 PM2로 실행
+            pm2 --name sparta-nest-cicd start dist/main.js
+
+            # PM2 설정 저장 (선택사항, startup 설정을 해놨다면)
+            pm2 save
+
+  slack-alarm:
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Test
+        run: echo "Hello slack"
