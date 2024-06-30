@@ -29,9 +29,16 @@ jobs:
             # 프로젝트 폴더로 이동
             cd /home/ubuntu/sparta-nest-cicd
 
+            # main 브랜치로 이동
+            git switch main
+
+            # 최신 소스 코드를 가져옴
+            git pull
+
             # .env 파일 생성
             # ">" 는 생성 또는 덮어쓰기
             # ">>" 는 내용 덧붙이기
             echo "SERVER_PORT=${{ secrets.SERVER_PORT }}" > .env
 
+            # 서버 시작 스크립트 실행
             source ./scripts/run.sh

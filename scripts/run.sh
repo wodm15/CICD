@@ -1,11 +1,5 @@
 #!/bin/bash
 
-# main 브랜치로 이동
-git switch main
-
-# 최신 소스 코드를 가져옴
-git pull
-
 # 의존성 설치
 yarn --frozen-lockfile
 
