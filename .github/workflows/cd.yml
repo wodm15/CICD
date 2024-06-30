@@ -26,6 +26,9 @@ jobs:
           port: ${{ secrets.AWS_EC2_PORT }}
           script: |
 
+            # bash shell 설정 불러오기 
+            source /home/ubuntu/.bashrc
+
             # 프로젝트 폴더로 이동
             cd /home/ubuntu/sparta-nest-cicd
 
@@ -42,3 +45,11 @@ jobs:
 
             # 서버 시작 스크립트 실행
             source ./scripts/run.sh
+
+  slack-alarm:
+    if: ${{ failure() }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Slack alarm
+        run: echo "배포에 실패했습니다."
