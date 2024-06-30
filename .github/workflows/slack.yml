@@ -11,7 +11,9 @@ jobs:
   slack-alarm:
     if: ${{ github.event.workflow_run.conclusion == 'failure' }}
     runs-on: ubuntu-latest
+    env:
+      FAILED_WORKFLOW_NAME: ${{ github.event.workflow_run.name == 'Sparta Nest.js CI' && '테스트' || github.event.workflow_run.name == 'Sparta Nest.js CD' && '배포' }}
 
     steps:
-      - name: Test
-        run: echo "Hello slack ${{ github.event.workflow_run.name }}"
+      - name: Slack alarm
+        run: echo "$FAILED_WORKFLOW_NAME 실패했습니다."
