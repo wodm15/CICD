@@ -26,9 +26,6 @@ jobs:
           port: ${{ secrets.AWS_EC2_PORT }}
           script: |
 
-            # Bash 설정 불러오기
-            exec bash --login
-
             # 프로젝트 폴더로 이동
             cd /home/ubuntu/sparta-nest-cicd
 
