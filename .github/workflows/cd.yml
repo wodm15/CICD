@@ -25,6 +25,11 @@ jobs:
           key: ${{ secrets.AWS_EC2_PEM_KEY }}
           port: ${{ secrets.AWS_EC2_PORT }}
           script: |
+
+            # 설치 된 명령어(yarn, pm2) 실행을 위한 설정
+            export NVM_DIR=~/.nvm
+            source ~/.nvm/nvm.sh
+
             # 프로젝트 폴더로 이동
             cd /home/ubuntu/sparta-nest-cicd
 
@@ -35,6 +40,8 @@ jobs:
             git pull
 
             # .env 파일 생성
+            # ">" 는 생성 또는 덮어쓰기
+            # ">>" 는 내용 덧붙이기
             echo "SERVER_PORT=${{ secrets.SERVER_PORT }}" > .env
 
             # 의존성 설치
