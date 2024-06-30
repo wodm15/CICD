@@ -27,8 +27,7 @@ jobs:
           script: |
 
             # 설치 된 명령어(yarn, pm2) 실행을 위한 설정
-            export NVM_DIR=~/.nvm
-            source ~/.nvm/nvm.sh
+            source ~/.bashrc
 
             # 프로젝트 폴더로 이동
             cd /home/ubuntu/sparta-nest-cicd
@@ -58,11 +57,3 @@ jobs:
 
             # PM2 설정 저장 (선택사항, startup 설정을 해놨다면)
             pm2 save
-
-  slack-alarm:
-    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Test
-        run: echo "Hello slack"

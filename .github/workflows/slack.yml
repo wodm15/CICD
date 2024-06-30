@@ -1,0 +1,17 @@
+name: Sparta Nest.js Slack alarm
+
+on:
+  workflow_dispatch: # 수동 실행
+  workflow_run: # 특정 workflow가 실행됐을 때
+    workflows: ['Sparta Nest.js CI', 'Sparta Nest.js CD']
+    branches: [main]
+    types: [completed]
+
+jobs:
+  slack-alarm:
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Test
+        run: echo "Hello slack ${{ github.event.workflow_run.name }}"
