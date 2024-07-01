@@ -3,27 +3,27 @@ name: Sparta Nest.js CD
 on:
   workflow_dispatch: # 수동 실행
   workflow_run: # 특정 workflow가 실행됐을 때
-    workflows: ['Sparta Nest.js CI']
-    branches: [main]
-    types: [completed]
+    workflows: ['Sparta Nest.js CI'] # CI workflow
+    branches: [main] # main 브랜치
+    types: [completed] # 완료 되었을 때
 
 jobs:
   deploy:
+    # workflow 완료 후 결과가 성공 일 때
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    # 작업을 실행 할 VM의 OS 지정
     runs-on: ubuntu-latest
 
+    # 작업 내의 단위 작업(step)을 정의
     steps:
-      # # 소스 코드 가져오기
-      # - name: Checkout source code # step의 이름 지정 (선택 사항)
-      #   uses: actions/checkout@v4 # 미리 정의 된 workflow를 불러와서 사용
-
+      # SSH 접속 후 명령을 통해서 배포 진행
       - name: Deploy to EC2
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@master # SSH 접속 후 명령 실행을 위해 미리 정의 된 workflow를 불러와서 사용
         with:
-          host: ${{ secrets.AWS_EC2_HOST }}
-          username: ${{ secrets.AWS_EC2_USERNAME }}
-          key: ${{ secrets.AWS_EC2_PEM_KEY }}
-          port: ${{ secrets.AWS_EC2_PORT }}
+          host: ${{ secrets.AWS_EC2_HOST }} # EC2 IP주소
+          username: ${{ secrets.AWS_EC2_USERNAME }} # EC2 사용자 (Ubuntu OS 설치 시 기본값은 ubuntu)
+          key: ${{ secrets.AWS_EC2_PEM_KEY }} # EC2 접속을 위한 pem 파일의 raw data
+          port: ${{ secrets.AWS_EC2_PORT }} # EC2 접속을 위한 SSH 포트
           script: |
 
             # node, npm, yarn 명령어 사용을 위한 설정 (.bashrc 파일에 추가되어 있는 내용)

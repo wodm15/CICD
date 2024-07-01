@@ -17,11 +17,11 @@ jobs:
     steps:
       # 소스 코드 가져오기
       - name: Checkout source code # step의 이름 지정 (선택 사항)
-        uses: actions/checkout@v4 # 미리 정의 된 workflow를 불러와서 사용
+        uses: actions/checkout@v4 # 소스 복사를 위해 미리 정의 된 workflow를 불러와서 사용
 
       # VM에 Node.js 설치하기
       - name: Setup Node.js environment # step의 이름 지정 (선택 사항)
-        uses: actions/setup-node@v4 # 미리 정의 된 workflow를 불러와서 사용
+        uses: actions/setup-node@v4 # Node.js 설치를 위해 미리 정의 된 workflow를 불러와서 사용
         with:
           node-version: 20 # 설치 할 Node.js 버전 지정
           cache: 'yarn' # npm 사용 시 'npm'
